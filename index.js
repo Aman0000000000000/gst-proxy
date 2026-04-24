@@ -30,6 +30,12 @@ app.get("/gstin/:gstin", async (req, res) => {
     const { data } = await axios.get(GST_API, {
       params: { action: "TP", gstin },
       timeout: 10000,
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+        "Referer": "https://www.gst.gov.in/",
+        "Origin": "https://www.gst.gov.in",
+        "Accept": "application/json, text/plain, */*",
+      },
     });
 
     const status = (data?.sts || "").toLowerCase();
@@ -58,7 +64,7 @@ app.get("/gstin/:gstin", async (req, res) => {
         return res.status(200).json({ error: "This GST No. is Inactive" });
       }
     }
-    console.error("GST API error:", err.message);
+    console.error("GST API error:", err.message, err.response?.status, JSON.stringify(err.response?.data));
     return res.status(502).json({ error: "Failed to reach GST portal" });
   }
 });
