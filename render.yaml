@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: gst-proxy
+    runtime: node
+    plan: free
+    buildCommand: npm ci --omit=dev
+    startCommand: node index.js
+    envVars:
+      - key: PORT
+        value: 3000
+    healthCheckPath: /health
